@@ -220,6 +220,8 @@ type InAppBrowserName =
   | 'pinterest'
   | 'generic';
 
+declare const SUPPORTED_BROWSERS: Record<SupportedBrowserId, BrowserInfo>;
+
 declare class BrowserSwitcher {
     /**
      * Detects the current platform based on user agent
@@ -268,4 +270,4 @@ declare class BrowserSwitcher {
     static isInAppBrowser(): boolean;
 }
 
-export { BrowserSwitcher as default };
+export { type BrowserInfo, type BrowserOpenOptions, type InAppBrowserName, type OpenMethod, type OpenWindowOptions, type Platform, SUPPORTED_BROWSERS, type SupportedBrowserId, BrowserSwitcher as default };

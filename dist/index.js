@@ -1,4 +1,4 @@
-// src/browsers.ts
+// src/core/browsers.ts
 var SUPPORTED_BROWSERS = {
   chrome: {
     id: "chrome",
@@ -74,7 +74,7 @@ var SUPPORTED_BROWSERS = {
   }
 };
 
-// src/index.ts
+// src/core/BrowserSwitcher.ts
 var BrowserSwitcher = class {
   /**
    * Detects the current platform based on user agent
@@ -273,7 +273,8 @@ var BrowserSwitcher = class {
     return this.detectInAppBrowser() !== null;
   }
 };
-var index_default = BrowserSwitcher;
+var BrowserSwitcher_default = BrowserSwitcher;
 export {
-  index_default as default
+  SUPPORTED_BROWSERS,
+  BrowserSwitcher_default as default
 };

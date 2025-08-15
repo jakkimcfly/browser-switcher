@@ -1,4 +1,4 @@
-import type { BrowserInfo, SupportedBrowserId } from './types';
+import type { BrowserInfo, SupportedBrowserId } from '../types/types';
 
 export const SUPPORTED_BROWSERS: Record<SupportedBrowserId, BrowserInfo> = {
   chrome: {

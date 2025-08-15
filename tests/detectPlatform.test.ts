@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import BrowserSwitcher from '../src';
+import BrowserSwitcher from '../src/core/BrowserSwitcher';
 
 describe('detectPlatform()', () => {
   const originalUserAgent = navigator.userAgent;

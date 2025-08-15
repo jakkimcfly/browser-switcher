@@ -20,11 +20,12 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  default: () => index_default
+  SUPPORTED_BROWSERS: () => SUPPORTED_BROWSERS,
+  default: () => BrowserSwitcher_default
 });
 module.exports = __toCommonJS(index_exports);
 
-// src/browsers.ts
+// src/core/browsers.ts
 var SUPPORTED_BROWSERS = {
   chrome: {
     id: "chrome",
@@ -100,7 +101,7 @@ var SUPPORTED_BROWSERS = {
   }
 };
 
-// src/index.ts
+// src/core/BrowserSwitcher.ts
 var BrowserSwitcher = class {
   /**
    * Detects the current platform based on user agent
@@ -299,4 +300,8 @@ var BrowserSwitcher = class {
     return this.detectInAppBrowser() !== null;
   }
 };
-var index_default = BrowserSwitcher;
+var BrowserSwitcher_default = BrowserSwitcher;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  SUPPORTED_BROWSERS
+});

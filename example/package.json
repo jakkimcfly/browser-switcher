@@ -15,5 +15,8 @@
 	"devDependencies": {
 		"typescript": "~5.8.3",
 		"vite": "^7.0.4"
+	},
+	"dependencies": {
+		"browser-switcher": "^1.1.0"
 	}
 }

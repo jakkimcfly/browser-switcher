@@ -1,6 +1,6 @@
-import './style.css'
+import './style.css';
 
-import BrowserSwitcher from '../../src'
+import BrowserSwitcher from 'browser-switcher';
 
 const platform = BrowserSwitcher.detectPlatform();
 switch (platform) {
