@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Import of package types.
 - Import of variable "SUPPORTED_BROWSERS".
 
-## Changed
+### Changed
 - Structure of files in the package.
 - Import package in "example".
 
