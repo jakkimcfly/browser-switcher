@@ -1,0 +1,56 @@
+{
+  "name": "browser-switcher",
+  "version": "1.0.0",
+  "description": "Redirect users to specific browsers on Android (using Intents) and iOS (using URL schemes).",
+  "homepage": "https://github.com/jakkimcfly/browser-switcher",
+  "keywords": [
+    "browser",
+    "open",
+    "redirect",
+    "scheme",
+    "intent",
+    "mobile",
+    "android",
+    "ios"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Aleksandr Zakharov",
+    "url": "https://jakkimcfly.com",
+    "email": "hello@jakkimcfly.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jakkimcfly/browser-switcher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jakkimcfly/browser-switcher/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && tsup --format iife",
+    "dev": "tsup --watch",
+    "prepublish": "npm run build && npm run test",
+    "test": "vitest",
+    "lint": "eslint ./src/**/*.ts ./tests/**/*.ts",
+    "lint:fix": "eslint ./src/**/*.ts ./tests/**/*.ts --fix"
+  },
+  "devDependencies": {
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
+    "user-agent-data-types": "^0.4.2",
+    "vitest": "^3.2.4"
+  }
+}
