@@ -17,6 +17,6 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"browser-switcher": "^1.1.0"
+		"browser-switcher": "^1.1.1"
 	}
 }

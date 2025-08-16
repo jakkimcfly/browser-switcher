@@ -93,8 +93,8 @@ try {
   console.log(error);
 }
 
-const currentPlatfrom = BrowserSwitcher.detectPlatform();
-console.log(currentPlatfrom);
+const currentPlatform = BrowserSwitcher.detectPlatform();
+console.log(currentPlatform);
 ```
 
 ## 🖥️ Live Demo
