@@ -80,7 +80,7 @@ npm install browser-switcher
 ## 🛠 Usage
 
 ```typescript
-import { BrowserSwitcher } from 'browser-switcher';
+import BrowserSwitcher from 'browser-switcher';
 
 try {
   BrowserSwitcher.open({
