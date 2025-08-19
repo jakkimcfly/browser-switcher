@@ -1,6 +1,6 @@
 {
   "name": "browser-switcher",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Redirect users to specific browsers on Android (using Intents) and iOS (using URL schemes).",
   "homepage": "https://github.com/jakkimcfly/browser-switcher",
   "keywords": [
@@ -26,6 +26,7 @@
   "bugs": {
     "url": "https://github.com/jakkimcfly/browser-switcher/issues"
   },
+	"unpkg": "./dist/index.min.js",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.cjs",
@@ -34,7 +35,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && tsup --format iife",
+    "build": "tsup",
     "dev": "tsup --watch",
     "prepublish": "npm run build && npm run test",
     "test": "vitest",

@@ -5,9 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2025-08-19
+
+### Added
+
+- Added detailed instructions in README for using the package via **CDN (unpkg.com)**, including both **ES module** and **IIFE** versions.  
+- Added `unpkg` field in `package.json` pointing to `"./dist/index.min.js"` for CDN usage.  
+
+### Changed
+
+- Updated `tsup.config.ts` to include proper configuration for **IIFE build**.  
+- Updated `build` script in `package.json` to reflect new tsup configuration and outputs.  
+
 ## [1.1.1] - 2025-08-17
 
-## Fixed
+### Fixed
 
 - Fix README.md
 
@@ -16,11 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Import of package types.
-- Import of variable "SUPPORTED_BROWSERS".
+- Import of variable `"SUPPORTED_BROWSERS"`.
 
 ### Changed
+
 - Structure of files in the package.
-- Import package in "example".
+- Import package in `/example`.
 
 ## [1.0.0] - 2025-08-15
 

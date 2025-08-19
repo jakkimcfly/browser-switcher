@@ -1,4 +1,4 @@
-# Browser Switcher
+# BrowserSwitcher
 
 [![npm version](https://img.shields.io/npm/v/browser-switcher?style=flat-square&color=red)](https://www.npmjs.com/package/browser-switcher)
 ![npm downloads](https://img.shields.io/npm/dm/browser-switcher?style=flat-square&color=red)
@@ -62,17 +62,56 @@ yarn add browser-switcher
 npm install browser-switcher
 ```
 
-### CDN
+### CDN (via unpkg.com)
 
-**Uncompressed:**
+You can use `browser-switcher` directly in the browser **without installing any package**. There are two main options:
+
+**1. IIFE version:**
+
 ```html
-<script src="https://unpkg.com/browser-switcher/dist/index.js"></script>
+<script src="https://unpkg.com/browser-switcher"></script>
 ```
 
-**Minified:**
+- This is the minified IIFE version (`dist/index.min.js`) suitable for including via a standard `<script>` tag.
+- The `BrowserSwitcher` class is exposed as a **global variable**, no import required.
 
 ```html
-<script src="https://unpkg.com/browser-switcher/dist/index.min.js"></script>
+<script type="text/javascript">
+  const link = document.getElementById('link');
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    try {
+      BrowserSwitcher.default.open({
+        targetUrl: 'https://google.com',
+        platform: 'auto',
+        browser: 'chrome',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  console.log(BrowserSwitcher.SUPPORTED_BROWSERS);
+</script>
+```
+
+**2. ES Module:**
+
+```html
+<script src="https://unpkg.com/browser-switcher/dist/index.js" type="module"></script>
+```
+
+- This is the ES module version (`index.js`) for modern browsers supporting `import/export`.
+- You must use `type="module"` in the `<script>` tag.
+
+```html
+<script type="module">
+  import BrowserSwitcher, { SUPPORTED_BROWSERS } from 'https://unpkg.com/browser-switcher/dist/index.js';
+  BrowserSwitcher.default.open({
+    targetUrl: 'https://google.com',
+    platform: 'auto',
+    browser: 'chrome',
+  });
+</script>
 ```
 
 > If you want a previous version, check the instructions at https://unpkg.com.
