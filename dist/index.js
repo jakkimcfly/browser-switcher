@@ -81,9 +81,9 @@ var BrowserSwitcher = class {
    * @returns {Platform} Detected platform: android, ios or desktop
    */
   static detectPlatform() {
-    const ua = navigator.userAgent;
+    const ua = (navigator.userAgent || "").toLowerCase();
     if (/android/i.test(ua)) return "android";
-    if (/iPad|iPhone|iPod/.test(ua)) return "ios";
+    if (/ipad|iphone|ipod/.test(ua)) return "ios";
     return "desktop";
   }
   /**
@@ -91,8 +91,8 @@ var BrowserSwitcher = class {
    * @returns {BrowserInfo | null} Browser info or null if not detected
    */
   static getCurrentBrowser() {
-    const ua = navigator.userAgent.toLowerCase();
-    const uaData = (navigator == null ? void 0 : navigator.userAgentData) || null;
+    const ua = (navigator.userAgent || "").toLowerCase();
+    const uaData = navigator?.userAgentData || null;
     if (ua.includes("firefox")) return SUPPORTED_BROWSERS["firefox"];
     if (ua.includes("brave")) return SUPPORTED_BROWSERS["brave"];
     if (ua.includes("edg")) return SUPPORTED_BROWSERS["edge"];
@@ -104,7 +104,7 @@ var BrowserSwitcher = class {
     if (ua.includes("vivaldi")) return SUPPORTED_BROWSERS["vivaldi"];
     if (ua.includes("ucbrowser")) return SUPPORTED_BROWSERS["uc"];
     if (ua.includes("yabrowser")) return SUPPORTED_BROWSERS["yandex"];
-    if (uaData == null ? void 0 : uaData.brands) {
+    if (uaData?.brands) {
       for (const brandInfo of uaData.brands) {
         const brand = brandInfo.brand.toLowerCase();
         if (brand.includes("chrome") && !brand.includes("edge") && !brand.includes("opera"))
@@ -131,7 +131,7 @@ var BrowserSwitcher = class {
   /**
    * Gets the configuration for a specific browser on current platform
    * @param {SupportedBrowserId} browserId - Target browser name
-   * @returns {BrowserConfig} Browser info
+   * @returns {BrowserInfo} Browser info
    */
   static getBrowserConfig(browserId) {
     return SUPPORTED_BROWSERS[browserId];
@@ -172,7 +172,7 @@ var BrowserSwitcher = class {
         if (browserInfo && !browserInfo.androidPackage) {
           throw new Error(`Unsupported browser for Android: ${browser}`);
         }
-        const intentUrl = `intent://${formattedUrl}#Intent;scheme=https;${(browserInfo == null ? void 0 : browserInfo.androidPackage) ? `package=${browserInfo.androidPackage};` : ""}end;`;
+        const intentUrl = `intent://${formattedUrl}#Intent;scheme=https;${browserInfo?.androidPackage ? `package=${browserInfo.androidPackage};` : ""}end;`;
         this.openWithMethod(intentUrl, method, windowOptions);
         return;
       }
@@ -207,7 +207,6 @@ var BrowserSwitcher = class {
    * @param windowOptions - Optional `window.open` parameters.
    */
   static openWithMethod(targetUrl, method, windowOptions) {
-    var _a, _b;
     switch (method) {
       case "href":
         window.location.href = targetUrl;
@@ -218,63 +217,111 @@ var BrowserSwitcher = class {
       case "open": {
         window.open(
           targetUrl,
-          (_a = windowOptions == null ? void 0 : windowOptions.target) != null ? _a : "_blank",
-          (_b = windowOptions == null ? void 0 : windowOptions.features) != null ? _b : "noopener,noreferrer"
+          windowOptions?.target ?? "_blank",
+          windowOptions?.features ?? "noopener,noreferrer"
         );
       }
     }
   }
   /**
-   * Detects if the current browser is an in-app browser (WebView inside social apps)
-   * @returns {InAppBrowserName | null} The name of the in-app browser or `null` if not in-app
+   * Detects known in-app browsers and common mobile WebView user agents.
+   * @param userAgent - Optional user agent string to check.
+   * @returns {InAppBrowserName | null} The detected name or `null` if not detected.
    */
-  static detectInAppBrowser() {
-    const ua = navigator.userAgent.toLowerCase();
-    if (ua.includes("fban") || ua.includes("fbav")) {
-      return "facebook";
+  static detectInAppBrowser(userAgent) {
+    if (this.isTelegram()) {
+      return "telegram";
     }
-    if (ua.includes("instagram")) {
+    const ua = (userAgent || navigator.userAgent || "").toLowerCase();
+    if (!ua) return null;
+    if (/\binstagram\b/.test(ua)) {
       return "instagram";
     }
-    if (ua.includes("twitter") || ua.includes("tweetbot")) {
-      return "twitter";
+    if (/\bbarcelona\b/.test(ua)) {
+      return "threads";
     }
-    if (ua.includes("tiktok")) {
-      return "tiktok";
-    }
-    if (ua.includes("whatsapp")) {
-      return "whatsapp";
-    }
-    if (ua.includes("linkedin")) {
-      return "linkedin";
-    }
-    if (ua.includes("messenger")) {
+    if (/\bmessenger\b|\bfban\/(?:messenger|orca)/.test(ua)) {
       return "messenger";
     }
-    if (ua.includes(" line/")) {
+    if (/\b(?:fban|fbav|fb_iab|fb4a|fbios)\b/.test(ua)) {
+      return "facebook";
+    }
+    if (/\b(?:twitter|tweetbot)\b/.test(ua)) {
+      return "twitter";
+    }
+    if (/\b(?:tiktok|musical_ly|aweme|bytedancewebview|trill)\b/.test(ua)) {
+      return "tiktok";
+    }
+    if (/\bwhatsapp\b/.test(ua)) {
+      return "whatsapp";
+    }
+    if (/\blinkedin(?:app)?\b/.test(ua)) {
+      return "linkedin";
+    }
+    if (/\bline\//.test(ua)) {
       return "line";
     }
-    if (ua.includes("snapchat")) {
+    if (/\bsnapchat\b/.test(ua)) {
       return "snapchat";
     }
-    if (ua.includes("pinterest")) {
+    if (/\bpinterest\b/.test(ua)) {
       return "pinterest";
     }
-    if (this.detectPlatform() === "android" && ua.includes("; wv)") || this.detectPlatform() === "ios" && ua.includes("applewebkit") && !ua.includes("safari") && !ua.includes("chrome") && !ua.includes("firefox") && !ua.includes("edge")) {
+    if (/\bkakaotalk\b/.test(ua)) {
+      return "kakaotalk";
+    }
+    if (/\bzalo\b/.test(ua)) {
+      return "zalo";
+    }
+    if (/\breddit\b/.test(ua)) {
+      return "reddit";
+    }
+    if (/\bdiscord\b/.test(ua)) {
+      return "discord";
+    }
+    if (/\bqq\/\d/.test(ua)) {
+      return "qq";
+    }
+    if (/\bviber\b/.test(ua)) {
+      return "viber";
+    }
+    if (/\bmicromessenger\b/.test(ua)) {
+      return "wechat";
+    }
+    if (/\b(?:vkclient|vkontakte|vkshare)\b/.test(ua)) {
+      return "vk";
+    }
+    const platform = this.detectPlatform();
+    if (platform === "android" && /;\s*wv\s*[;)]/.test(ua) || platform === "ios" && ua.includes("applewebkit") && !ua.includes("safari") && !/\b(?:chrome|crios|firefox|fxios|edge|edgios|opios|opt|yabrowser|duckduckgo|brave|aloha)\//.test(
+      ua
+    )) {
       return "generic";
     }
     return null;
   }
   /**
+   * Checks whether the current page is running inside Telegram's WebApp.
+   * @returns {boolean} `True` if running inside Telegram's WebApp, otherwise `false`
+   */
+  static isTelegram() {
+    if (typeof window === "undefined") return false;
+    const win = window;
+    const webApp = win.Telegram?.WebApp;
+    const isMiniApp = Boolean(webApp?.initData) || Boolean(webApp?.platform && webApp.platform !== "unknown");
+    const isNativeWebView = Boolean(win.TelegramWebviewProxy) || Boolean(win.TelegramWebviewProxyProto) || Boolean(win.TelegramWebview) || Boolean(win.TelegramGameProxy);
+    const hasTgHash = window.location.hash.includes("tgWebAppData=");
+    return isMiniApp || isNativeWebView || hasTgHash;
+  }
+  /**
    * Checks if the current browser is an in-app browser
+   * @param {string} [userAgent] Optional user agent string to check against
    * @returns {boolean} `True` if in-app browser is detected
    */
-  static isInAppBrowser() {
-    return this.detectInAppBrowser() !== null;
+  static isInAppBrowser(userAgent) {
+    return this.detectInAppBrowser(userAgent) !== null;
   }
 };
-var BrowserSwitcher_default = BrowserSwitcher;
 export {
-  SUPPORTED_BROWSERS,
-  BrowserSwitcher_default as default
+  BrowserSwitcher,
+  SUPPORTED_BROWSERS
 };

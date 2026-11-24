@@ -205,6 +205,16 @@ interface BrowserOpenOptions {
  * - `'line'` — LINE messenger's in-app browser
  * - `'snapchat'` — Snapchat's in-app browser
  * - `'pinterest'` — Pinterest's in-app browser
+ * - `'threads'` — Threads' in-app browser
+ * - `'kakaotalk'` — KakaoTalk's in-app browser
+ * - `'zalo'` — Zalo's in-app browser
+ * - `'reddit'` — Reddit's in-app browser
+ * - `'discord'` — Discord's in-app browser
+ * - `'qq'` — QQ's in-app browser
+ * - `'viber'` — Viber's in-app browser
+ * - `'wechat'` — WeChat's in-app browser
+ * - `'vk'` — VK's in-app browser
+ * - `'telegram'` — Telegram's in-app browser
  * - `'generic'` — A generic/unknown in-app browser that does not match any of the above
  */
 type InAppBrowserName =
@@ -218,6 +228,16 @@ type InAppBrowserName =
   | 'line'
   | 'snapchat'
   | 'pinterest'
+  | 'threads'
+  | 'kakaotalk'
+  | 'zalo'
+  | 'reddit'
+  | 'discord'
+  | 'qq'
+  | 'viber'
+  | 'wechat'
+  | 'vk'
+  | 'telegram'
   | 'generic';
 
 declare const SUPPORTED_BROWSERS: Record<SupportedBrowserId, BrowserInfo>;
@@ -236,7 +256,7 @@ declare class BrowserSwitcher {
     /**
      * Gets the configuration for a specific browser on current platform
      * @param {SupportedBrowserId} browserId - Target browser name
-     * @returns {BrowserConfig} Browser info
+     * @returns {BrowserInfo} Browser info
      */
     static getBrowserConfig(browserId: SupportedBrowserId): BrowserInfo;
     /**
@@ -259,15 +279,23 @@ declare class BrowserSwitcher {
      */
     private static openWithMethod;
     /**
-     * Detects if the current browser is an in-app browser (WebView inside social apps)
-     * @returns {InAppBrowserName | null} The name of the in-app browser or `null` if not in-app
+     * Detects known in-app browsers and common mobile WebView user agents.
+     * @param userAgent - Optional user agent string to check.
+     * @returns {InAppBrowserName | null} The detected name or `null` if not detected.
      */
-    static detectInAppBrowser(): InAppBrowserName | null;
+    static detectInAppBrowser(userAgent?: string): InAppBrowserName | null;
+    /**
+     * Checks whether the current page is running inside Telegram's WebApp.
+     * @returns {boolean} `True` if running inside Telegram's WebApp, otherwise `false`
+     */
+    static isTelegram(): boolean;
     /**
      * Checks if the current browser is an in-app browser
+     * @param {string} [userAgent] Optional user agent string to check against
      * @returns {boolean} `True` if in-app browser is detected
      */
-    static isInAppBrowser(): boolean;
+    static isInAppBrowser(userAgent?: string): boolean;
 }
 
-export { type BrowserInfo, type BrowserOpenOptions, type InAppBrowserName, type OpenMethod, type OpenWindowOptions, type Platform, SUPPORTED_BROWSERS, type SupportedBrowserId, BrowserSwitcher as default };
+export { BrowserSwitcher, SUPPORTED_BROWSERS };
+export type { BrowserInfo, BrowserOpenOptions, InAppBrowserName, OpenMethod, OpenWindowOptions, Platform, SupportedBrowserId };

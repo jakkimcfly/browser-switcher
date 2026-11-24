@@ -1,6 +1,6 @@
 {
   "name": "browser-switcher",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Redirect users to specific browsers on Android (using Intents) and iOS (using URL schemes).",
   "homepage": "https://github.com/jakkimcfly/browser-switcher",
   "keywords": [
@@ -11,7 +11,8 @@
     "intent",
     "mobile",
     "android",
-    "ios"
+    "ios",
+    "in-app"
   ],
   "license": "MIT",
   "author": {
@@ -26,10 +27,10 @@
   "bugs": {
     "url": "https://github.com/jakkimcfly/browser-switcher/issues"
   },
-	"unpkg": "./dist/index.min.js",
+  "unpkg": "./dist/index.js",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.cjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -37,21 +38,22 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "prepublish": "npm run build && npm run test",
+    "prepublish": "npm run lint && npm run test && npm run build",
     "test": "vitest",
     "lint": "eslint ./src/**/*.ts ./tests/**/*.ts",
     "lint:fix": "eslint ./src/**/*.ts ./tests/**/*.ts --fix"
   },
   "devDependencies": {
-    "eslint": "^9.31.0",
+    "@types/telegram-web-app": "^10.1.0",
+    "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.3",
-    "jsdom": "^26.1.0",
-    "prettier": "^3.6.2",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0",
-    "user-agent-data-types": "^0.4.2",
-    "vitest": "^3.2.4"
+    "eslint-plugin-prettier": "^5.5.7",
+    "jsdom": "^31.0.1",
+    "prettier": "^3.10.1",
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.74.0",
+    "user-agent-data-types": "^0.4.3",
+    "vitest": "^5.1.1"
   }
 }

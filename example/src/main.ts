@@ -1,6 +1,6 @@
 import './style.css';
 
-import BrowserSwitcher from 'browser-switcher';
+import { BrowserSwitcher } from 'browser-switcher';
 
 const platform = BrowserSwitcher.detectPlatform();
 switch (platform) {
@@ -15,6 +15,13 @@ switch (platform) {
 }
 
 const targetUrl = 'https://google.com/qwerty?foo=bar#hello';
+
+
+const isInAppBrowser = BrowserSwitcher.detectInAppBrowser();
+if (isInAppBrowser) {
+  document.body.classList.add('in-app-browser');
+  document.querySelector<HTMLParagraphElement>('#in-app')?.setAttribute('data-name', isInAppBrowser);
+}
 
 /**
  * iOS Buttons

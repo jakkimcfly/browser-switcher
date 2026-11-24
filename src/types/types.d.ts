@@ -205,6 +205,16 @@ export interface BrowserOpenOptions {
  * - `'line'` — LINE messenger's in-app browser
  * - `'snapchat'` — Snapchat's in-app browser
  * - `'pinterest'` — Pinterest's in-app browser
+ * - `'threads'` — Threads' in-app browser
+ * - `'kakaotalk'` — KakaoTalk's in-app browser
+ * - `'zalo'` — Zalo's in-app browser
+ * - `'reddit'` — Reddit's in-app browser
+ * - `'discord'` — Discord's in-app browser
+ * - `'qq'` — QQ's in-app browser
+ * - `'viber'` — Viber's in-app browser
+ * - `'wechat'` — WeChat's in-app browser
+ * - `'vk'` — VK's in-app browser
+ * - `'telegram'` — Telegram's in-app browser
  * - `'generic'` — A generic/unknown in-app browser that does not match any of the above
  */
 export type InAppBrowserName =
@@ -218,4 +228,14 @@ export type InAppBrowserName =
   | 'line'
   | 'snapchat'
   | 'pinterest'
+  | 'threads'
+  | 'kakaotalk'
+  | 'zalo'
+  | 'reddit'
+  | 'discord'
+  | 'qq'
+  | 'viber'
+  | 'wechat'
+  | 'vk'
+  | 'telegram'
   | 'generic';

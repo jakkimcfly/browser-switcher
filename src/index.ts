@@ -1,3 +1,4 @@
 export type * from './types/types';
-export * from './core/browsers';
-export { default } from './core/BrowserSwitcher';
+
+export { SUPPORTED_BROWSERS } from './core/browsers';
+export { BrowserSwitcher } from './core/BrowserSwitcher';

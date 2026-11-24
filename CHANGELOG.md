@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-11-24
+
+### Added
+
+- Added in-app browser detection for Threads, KakaoTalk, Zalo, Reddit, Discord, QQ, Viber, WeChat, and VK, along with additional Facebook, Messenger, and TikTok user-agent markers.
+- Added 'isTelegram' method to detect if running inside Telegram's WebApp: `BrowserSwitcher.isTelegram()`. 'detectInAppBrowser' or 'isInAppBrowser' will also detect Telegram  in-app browser.
+- Added an optional `userAgent` argument to `BrowserSwitcher.detectInAppBrowser(userAgent?: string)`.
+- Added an optional `userAgent` argument to `BrowserSwitcher.isInAppBrowser(userAgent?: string)`.
+
+### Fixed
+
+- Improved user-agent matching to reduce false positives and distinguish generic Android/iOS WebViews from regular browsers.
+- Made platform and browser detection handle empty user-agent strings and case variations.
+
+### Changed
+
+- Replaced the default export with the named `BrowserSwitcher` export; use `import { BrowserSwitcher } from 'browser-switcher'`. The IIFE build exposes `BrowserSwitcher` and `SUPPORTED_BROWSERS` as globals, so call `BrowserSwitcher` directly without `.default`.
+- Updated CommonJS usage to destructure the export: `const { BrowserSwitcher } = require('browser-switcher/dist/index.cjs')`.
+- Corrected the package entry points for ESM and CommonJS and set the `unpkg` entry to the ESM bundle.
+
 ## [1.1.2] - 2025-08-19
 
 ### Added

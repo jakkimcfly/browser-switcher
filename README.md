@@ -1,14 +1,16 @@
 # BrowserSwitcher
 
 [![npm version](https://img.shields.io/npm/v/browser-switcher?style=flat-square&color=red)](https://www.npmjs.com/package/browser-switcher)
-![npm downloads](https://img.shields.io/npm/dm/browser-switcher?style=flat-square&color=red)
+[![npm downloads](https://img.shields.io/npm/dm/browser-switcher?style=flat-square&color=red)](https://www.npmjs.com/package/browser-switcher)
 ![GitHub Repo Stars](https://img.shields.io/github/stars/jakkimcfly/browser-switcher?style=flat-square)
-![GitHub Forks](https://img.shields.io/github/forks/jakkimcfly/browser-switcher?style=flat-square)
-[![License: MIT](https://img.shields.io/github/license/jakkimcfly/browser-switcher?style=flat-square)](https://opensource.org/licenses/MIT)
+[![GitHub Forks](https://img.shields.io/github/forks/jakkimcfly/browser-switcher?style=flat-square)](https://github.com/jakkimcfly/browser-switcher/fork)
+[![License: MIT](https://img.shields.io/github/license/jakkimcfly/browser-switcher?style=flat-square)](https://github.com/jakkimcfly/browser-switcher/blob/main/LICENSE)
 
-Redirect users to specific browsers on Android (using Intents) and iOS (using URL schemes).
+- Redirect users to specific browsers on `Android` (using Intents) and `iOS` (using URL schemes).
+- Detects the `platform` and `In-App Browser`.
 
 ## 📖 Tables of Contents
+
 - [Features](#-features)
 - [Supported Browsers](#-supported-browsers)
 - [Installation](#-installation)
@@ -51,37 +53,69 @@ Redirect users to specific browsers on Android (using Intents) and iOS (using UR
 
 ## 📦 Installation
 
+### npm
+
+```bash
+npm install browser-switcher
+```
+
+### bun
+
+```bash
+bun add browser-switcher
+```
+
 ### Yarn
 
 ```bash
 yarn add browser-switcher
 ```
 
-### npm
-```bash
-npm install browser-switcher
-```
-
 ### CDN (via unpkg.com)
 
-You can use `browser-switcher` directly in the browser **without installing any package**. There are two main options:
+You can use `browser-switcher` directly in the browser **without installing any package**. There are three options:
 
-**1. IIFE version:**
+**1. ES Module:**
 
 ```html
-<script src="https://unpkg.com/browser-switcher"></script>
+<script src="https://unpkg.com/browser-switcher" type="module"></script>
+```
+
+- This is the ES module version (`index.js`) for modern browsers supporting `import/export`.
+- You must use `type="module"` in the `<script>` tag.
+
+```html
+<script type="module">
+  import { BrowserSwitcher, SUPPORTED_BROWSERS } from 'https://unpkg.com/browser-switcher';
+  try {
+    BrowserSwitcher.open({
+      targetUrl: 'https://google.com',
+      platform: 'auto',
+      browser: 'chrome',
+    });
+  } catch (error) {
+    console.log(error);
+  }
+</script>
+```
+
+**2. IIFE version:**
+
+```html
+<script src="https://unpkg.com/browser-switcher/dist/index.min.js"></script>
 ```
 
 - This is the minified IIFE version (`dist/index.min.js`) suitable for including via a standard `<script>` tag.
 - The `BrowserSwitcher` class is exposed as a **global variable**, no import required.
 
 ```html
+<a id="link" href="#">Open in Browser</a>
 <script type="text/javascript">
   const link = document.getElementById('link');
   link.addEventListener('click', (e) => {
     e.preventDefault();
     try {
-      BrowserSwitcher.default.open({
+      BrowserSwitcher.open({
         targetUrl: 'https://google.com',
         platform: 'auto',
         browser: 'chrome',
@@ -90,36 +124,31 @@ You can use `browser-switcher` directly in the browser **without installing any 
       console.log(error);
     }
   });
-  console.log(BrowserSwitcher.SUPPORTED_BROWSERS);
+  console.log(SUPPORTED_BROWSERS);
 </script>
 ```
 
-**2. ES Module:**
+**3. CommonJS version:**
 
-```html
-<script src="https://unpkg.com/browser-switcher/dist/index.js" type="module"></script>
-```
-
-- This is the ES module version (`index.js`) for modern browsers supporting `import/export`.
-- You must use `type="module"` in the `<script>` tag.
-
-```html
-<script type="module">
-  import BrowserSwitcher, { SUPPORTED_BROWSERS } from 'https://unpkg.com/browser-switcher/dist/index.js';
-  BrowserSwitcher.default.open({
+```javascript
+const { BrowserSwitcher } = require('browser-switcher/dist/index.cjs');
+try {
+  BrowserSwitcher.open({
     targetUrl: 'https://google.com',
     platform: 'auto',
     browser: 'chrome',
   });
-</script>
+} catch (error) {
+  console.log(error);
+}
 ```
 
-> If you want a previous version, check the instructions at https://unpkg.com.
+> If you want a previous version, check the instructions at [unpkg.com](https://unpkg.com).
 
 ## 🛠 Usage
 
 ```typescript
-import BrowserSwitcher from 'browser-switcher';
+import { BrowserSwitcher } from 'browser-switcher';
 
 try {
   BrowserSwitcher.open({
@@ -154,9 +183,10 @@ This library uses platform-specific mechanisms to launch URLs in external browse
 - **Mechanism:** Uses [Android intents](https://developer.chrome.com/docs/multidevice/android/intents) to open URLs in a specific browser.
 
 - **Format:**
-	```text
-	intent://<host>/<path>#Intent;scheme=https;package=<browser-package>;end;
-	```
+
+```text
+intent://<host>/<path>#Intent;scheme=https;package=<browser-package>;end;
+```
 
 ### iOS URL Scheme Handling
 
@@ -164,9 +194,9 @@ This library uses platform-specific mechanisms to launch URLs in external browse
 
 - **Format:**
 
-	```text
-	googlechrome://www.example.com
-	```
+```text
+googlechrome://www.example.com
+```
 
 - **Limitations:** Only works if the corresponding browser app is **installed**.
 
@@ -179,7 +209,7 @@ This library uses platform-specific mechanisms to launch URLs in external browse
 
 **iOS:**
 
-- iOS **always shows** an alert before switching apps.
+- iOS **may show** an alert before switching apps.
 
 ### 📚 References
 
@@ -196,11 +226,11 @@ Redirects the user to a specific browser using platform-specific deep linking (A
 
 | Parameter       | Type                 | Required | Description                                                         |
 | --------------- | -------------------- | -------- | ------------------------------------------------------------------- |
-| `targetUrl`     | *string*             | ✅ Yes  | The URL to open.                                                    |
-| `platform`      | *Platform \| 'auto'* | ✅ Yes  | Platform to target. If `'auto'`, it will be detected automatically. |
-| `browser`       | *SupportedBrowserId* | ❌ No   | Target browser ID (e.g., `'chrome'`, `'firefox'`, `'safari'`).      |
-| `method`        | *OpenMethod*         | ❌ No   | Redirect method: `'href'` (default), `'replace'` or `'open'`.       |
-| `windowOptions` | *OpenWindowOptions*  | ❌ No   | Only used with `'open'` method to customize window.                 |
+| `targetUrl`     | *string*             | ✅ Yes   | The URL to open.                                                    |
+| `platform`      | *Platform \| 'auto'* | ✅ Yes   | Platform to target. If `'auto'`, it will be detected automatically. |
+| `browser`       | *SupportedBrowserId* | ❌ No    | Target browser ID (e.g., `'chrome'`, `'firefox'`, `'safari'`).      |
+| `method`        | *OpenMethod*         | ❌ No    | Redirect method: `'href'` (default), `'replace'` or `'open'`.       |
+| `windowOptions` | *OpenWindowOptions*  | ❌ No    | Only used with `'open'` method to customize window.                 |
 
 **Important:**
 
@@ -256,7 +286,7 @@ console.log(config.androidPackage); // com.android.chrome
 
 #### `BrowserSwitcher.supportedBrowsers(platform?: Platform | null): BrowserInfo[]`
 
-Returns a list of supported browsers for a given platform (or auto-detected if not specified).
+**Returns:** a list of supported browsers for a given platform (or auto-detected if not specified).
 
 **Example:**
 
@@ -266,17 +296,79 @@ const androidBrowsers = BrowserSwitcher.supportedBrowsers('android');
 
 ---
 
-#### `BrowserSwitcher.detectInAppBrowser(): InAppBrowserName | null`
+#### `BrowserSwitcher.detectInAppBrowser(userAgent?: string): InAppBrowserName | null`
 
 Detects if the user is currently inside an **in-app browser** (e.g., facebook, instagram, tiktok).
 
 **Returns:** Name of the in-app browser or `null` if not detected.
 
+**Example:**
+
+```typescript
+const inAppBrowser = BrowserSwitcher.detectInAppBrowser();
+if (inAppBrowser) {
+  console.log(`Hello ${inAppBrowser}!`);
+}
+```
+
+Detection is based on User-Agent markers, except Telegram which is detected through
+`window.Telegram.WebApp` or related signals. User-Agent detection is best-effort: apps can omit or change
+their markers, and some embedded browsers may look like ordinary browsers. Unrecognized
+Android or iOS WebViews with common WebView markers are returned as `generic`.
+
+When a `userAgent` is provided, Telegram signals from the current environment are
+checked first and take precedence over the supplied string. Generic WebView detection
+uses the current platform from `navigator.userAgent`, not the supplied string.
+An empty `userAgent` falls back to `navigator.userAgent`.
+
+**Detectable in-app browsers:**
+
+| Value       | App                                                  |
+| ----------- | ---------------------------------------------------- |
+| `facebook`  | Facebook                                             |
+| `instagram` | Instagram                                            |
+| `messenger` | Facebook Messenger                                   |
+| `twitter`   | Twitter (X), Tweetbot                                |
+| `tiktok`    | TikTok                                               |
+| `whatsapp`  | WhatsApp                                             |
+| `linkedin`  | LinkedIn                                             |
+| `line`      | LINE                                                 |
+| `snapchat`  | Snapchat                                             |
+| `pinterest` | Pinterest                                            |
+| `threads`   | Threads                                              |
+| `kakaotalk` | KakaoTalk                                            |
+| `zalo`      | Zalo                                                 |
+| `reddit`    | Reddit                                               |
+| `discord`   | Discord                                              |
+| `qq`        | QQ                                                   |
+| `viber`     | Viber                                                |
+| `wechat`    | WeChat                                               |
+| `vk`        | VKontakte (VK)                                       |
+| `telegram`  | Telegram                                             |
+| `generic`   | Unrecognized Android/iOS WebView with common markers |
+
 ---
 
-#### `BrowserSwitcher.isInAppBrowser(): boolean`
+#### `BrowserSwitcher.isTelegram(): boolean`
 
-Shorthand for checking if `detectInAppBrowser()` returns a value.
+Detects if the user is currently inside the **Telegram in-app browser**.
+
+**Returns:** `true` when the Telegram in-app browser is detected via `window.Telegram.WebApp` or related signals.
+
+**Example:**
+
+```typescript
+const isTelegram = BrowserSwitcher.isTelegram();
+if (isTelegram) {
+  console.log('Hello Telegram!');
+}
+```
+
+---
+
+#### `BrowserSwitcher.isInAppBrowser(userAgent?: string): boolean`
+
+Shorthand for checking if `detectInAppBrowser()` returns a value. Optionally accepts a `userAgent` string to check against.
 
 **Example:**
 
@@ -301,9 +393,11 @@ Before reporting:
 - Code snippet that triggers the issue  
 - Any error messages
 ```  
+
 *Be kind – I work on this in my free time.*
 
 ## ✨ Support This Project
+
 This is an open-source passion project. If you find it useful, here’s how you can help keep it alive:
 
 **Code Contributions:**
@@ -321,16 +415,16 @@ This is an open-source passion project. If you find it useful, here’s how you 
 *No pressure, but if you’re feeling generous:*
 
 <a href="https://www.buymeacoffee.com/jakkimcfly" target="_blank">
-	<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="54" width="auto">
+ <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="54" width="auto">
 </a>
 
 ## 📃 License (MIT)
 
-This project is open-source and licensed under the [MIT License](LICENSE) - one of the most permissive licenses that gives you a lot of freedom with few restrictions.
+This project is open-source and licensed under the [MIT License](https://github.com/jakkimcfly/browser-switcher/blob/main/LICENSE) - one of the most permissive licenses that gives you a lot of freedom with few restrictions.
 
 **TL;DR:**
 
 - ✅ Use it anywhere (even commercially)
 - ✅ Modify as needed
 - ✅ No need to credit (but appreciated)
-- ❌ Don’t sue me if something breaks
+- ❌ Don't sue me if something breaks

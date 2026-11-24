@@ -13,10 +13,10 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"typescript": "~5.8.3",
-		"vite": "^7.0.4"
+		"typescript": "^6.0.3",
+		"vite": "^8.3.8"
 	},
 	"dependencies": {
-		"browser-switcher": "~1.1.2"
+		"browser-switcher": "file:.."
 	}
 }

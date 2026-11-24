@@ -1,4 +1,5 @@
 /// <reference types="user-agent-data-types" />
+import type { WebApp } from 'telegram-web-app';
 import { SUPPORTED_BROWSERS } from './browsers';
 import type {
   BrowserInfo,
@@ -16,9 +17,9 @@ class BrowserSwitcher {
    * @returns {Platform} Detected platform: android, ios or desktop
    */
   static detectPlatform(): Platform {
-    const ua = navigator.userAgent;
+    const ua = (navigator.userAgent || '').toLowerCase();
     if (/android/i.test(ua)) return 'android';
-    if (/iPad|iPhone|iPod/.test(ua)) return 'ios';
+    if (/ipad|iphone|ipod/.test(ua)) return 'ios';
     return 'desktop';
   }
 
@@ -27,7 +28,7 @@ class BrowserSwitcher {
    * @returns {BrowserInfo | null} Browser info or null if not detected
    */
   static getCurrentBrowser(): BrowserInfo | null {
-    const ua = navigator.userAgent.toLowerCase();
+    const ua = (navigator.userAgent || '').toLowerCase();
     const uaData = navigator?.userAgentData || null;
 
     if (ua.includes('firefox')) return SUPPORTED_BROWSERS['firefox'];
@@ -82,7 +83,7 @@ class BrowserSwitcher {
   /**
    * Gets the configuration for a specific browser on current platform
    * @param {SupportedBrowserId} browserId - Target browser name
-   * @returns {BrowserConfig} Browser info
+   * @returns {BrowserInfo} Browser info
    */
   static getBrowserConfig(browserId: SupportedBrowserId): BrowserInfo {
     return SUPPORTED_BROWSERS[browserId];
@@ -191,70 +192,124 @@ class BrowserSwitcher {
   }
 
   /**
-   * Detects if the current browser is an in-app browser (WebView inside social apps)
-   * @returns {InAppBrowserName | null} The name of the in-app browser or `null` if not in-app
+   * Detects known in-app browsers and common mobile WebView user agents.
+   * @param userAgent - Optional user agent string to check.
+   * @returns {InAppBrowserName | null} The detected name or `null` if not detected.
    */
-  static detectInAppBrowser(): InAppBrowserName | null {
-    const ua = navigator.userAgent.toLowerCase();
-    // Facebook apps
-    if (ua.includes('fban') || ua.includes('fbav')) {
-      return 'facebook';
+  static detectInAppBrowser(userAgent?: string): InAppBrowserName | null {
+    // Check for Telegram WebApp first
+    if (this.isTelegram()) {
+      return 'telegram';
     }
 
-    // Instagram
-    if (ua.includes('instagram')) {
+    const ua = (userAgent || navigator.userAgent || '').toLowerCase();
+    if (!ua) return null;
+
+    // 1. Instagram
+    if (/\binstagram\b/.test(ua)) {
       return 'instagram';
     }
 
-    // Twitter
-    if (ua.includes('twitter') || ua.includes('tweetbot')) {
-      return 'twitter';
+    // 2. Threads
+    if (/\bbarcelona\b/.test(ua)) {
+      return 'threads';
     }
 
-    // TikTok
-    if (ua.includes('tiktok')) {
-      return 'tiktok';
-    }
-
-    // WhatsApp
-    if (ua.includes('whatsapp')) {
-      return 'whatsapp';
-    }
-
-    // LinkedIn
-    if (ua.includes('linkedin')) {
-      return 'linkedin';
-    }
-
-    // Facebook Messenger
-    if (ua.includes('messenger')) {
+    // 3. Facebook Messenger
+    if (/\bmessenger\b|\bfban\/(?:messenger|orca)/.test(ua)) {
       return 'messenger';
     }
 
-    // Line
-    if (ua.includes(' line/')) {
+    // 4. Facebook
+    if (/\b(?:fban|fbav|fb_iab|fb4a|fbios)\b/.test(ua)) {
+      return 'facebook';
+    }
+
+    // 5. Twitter / X
+    if (/\b(?:twitter|tweetbot)\b/.test(ua)) {
+      return 'twitter';
+    }
+
+    // 6. TikTok / ByteDance apps
+    if (/\b(?:tiktok|musical_ly|aweme|bytedancewebview|trill)\b/.test(ua)) {
+      return 'tiktok';
+    }
+
+    // 7. WhatsApp
+    if (/\bwhatsapp\b/.test(ua)) {
+      return 'whatsapp';
+    }
+
+    // 8. LinkedIn
+    if (/\blinkedin(?:app)?\b/.test(ua)) {
+      return 'linkedin';
+    }
+
+    // 9. Line
+    if (/\bline\//.test(ua)) {
       return 'line';
     }
 
-    // Snapchat
-    if (ua.includes('snapchat')) {
+    // 10. Snapchat
+    if (/\bsnapchat\b/.test(ua)) {
       return 'snapchat';
     }
 
-    // Pinterest
-    if (ua.includes('pinterest')) {
+    // 11. Pinterest
+    if (/\bpinterest\b/.test(ua)) {
       return 'pinterest';
     }
 
-    // Generic WebView detection
+    // 12. KakaoTalk
+    if (/\bkakaotalk\b/.test(ua)) {
+      return 'kakaotalk';
+    }
+
+    // 13. Zalo
+    if (/\bzalo\b/.test(ua)) {
+      return 'zalo';
+    }
+
+    // 14. Reddit
+    if (/\breddit\b/.test(ua)) {
+      return 'reddit';
+    }
+
+    // 15. Discord
+    if (/\bdiscord\b/.test(ua)) {
+      return 'discord';
+    }
+
+    // 16. QQ / QQ Browser
+    if (/\bqq\/\d/.test(ua)) {
+      return 'qq';
+    }
+
+    // 17. Viber
+    if (/\bviber\b/.test(ua)) {
+      return 'viber';
+    }
+
+    // 18. WeChat
+    if (/\bmicromessenger\b/.test(ua)) {
+      return 'wechat';
+    }
+
+    // 19. VK
+    if (/\b(?:vkclient|vkontakte|vkshare)\b/.test(ua)) {
+      return 'vk';
+    }
+
+    // 20. Generic WebView detection
+    const platform = this.detectPlatform();
     if (
-      (this.detectPlatform() === 'android' && ua.includes('; wv)')) ||
-      (this.detectPlatform() === 'ios' &&
+      (platform === 'android' && /;\s*wv\s*[;)]/.test(ua)) ||
+      (platform === 'ios' &&
         ua.includes('applewebkit') &&
         !ua.includes('safari') &&
-        !ua.includes('chrome') &&
-        !ua.includes('firefox') &&
-        !ua.includes('edge'))
+        !/\b(?:chrome|crios|firefox|fxios|edge|edgios|opios|opt|yabrowser|duckduckgo|brave|aloha)\//.test(
+          ua
+        ))
     ) {
       return 'generic';
     }
@@ -262,12 +317,46 @@ class BrowserSwitcher {
   }
 
   /**
+   * Checks whether the current page is running inside Telegram's WebApp.
+   * @returns {boolean} `True` if running inside Telegram's WebApp, otherwise `false`
+   */
+  static isTelegram(): boolean {
+    if (typeof window === 'undefined') return false;
+
+    const win = window as typeof window & {
+      Telegram?: { WebApp?: WebApp };
+      TelegramWebviewProxy?: unknown;
+      TelegramWebviewProxyProto?: unknown;
+      TelegramWebview?: unknown;
+      TelegramGameProxy?: unknown;
+    };
+    const webApp = win.Telegram?.WebApp;
+
+    // 1. Check if the page is actually running inside Telegram Mini App
+    const isMiniApp =
+      Boolean(webApp?.initData) || Boolean(webApp?.platform && webApp.platform !== 'unknown');
+
+    // 2. Detect native WebView bridges injected by the Telegram client
+    const isNativeWebView =
+      Boolean(win.TelegramWebviewProxy) ||
+      Boolean(win.TelegramWebviewProxyProto) ||
+      Boolean(win.TelegramWebview) ||
+      Boolean(win.TelegramGameProxy);
+
+    // 3. Check the URL hash (added when opened via Web App / bot buttons)
+    const hasTgHash = window.location.hash.includes('tgWebAppData=');
+
+    return isMiniApp || isNativeWebView || hasTgHash;
+  }
+
+  /**
    * Checks if the current browser is an in-app browser
+   * @param {string} [userAgent] Optional user agent string to check against
    * @returns {boolean} `True` if in-app browser is detected
    */
-  static isInAppBrowser(): boolean {
-    return this.detectInAppBrowser() !== null;
+  static isInAppBrowser(userAgent?: string): boolean {
+    return this.detectInAppBrowser(userAgent) !== null;
   }
 }
 
-export default BrowserSwitcher;
+export { BrowserSwitcher };
